@@ -10,7 +10,15 @@
 # apt-get install -y redis-server
 ```
 
-### CentOS
+### CentOS 8.1
+
+```no-highlight
+# dnf install -y redis
+# systemctl start redis
+# systemctl enable redis
+```
+
+### CentOS 7.5
 
 ```no-highlight
 # yum install -y epel-release

@@ -5,7 +5,7 @@ This section entails the installation and configuration of a local PostgreSQL da
 !!! warning
     NetBox requires PostgreSQL 9.4 or higher. Please note that MySQL and other relational databases are **not** supported.
 
-The installation instructions provided here have been tested to work on Ubuntu 18.04 and CentOS 7.5. The particular commands needed to install dependencies on other distributions may vary significantly. Unfortunately, this is outside the control of the NetBox maintainers. Please consult your distribution's documentation for assistance with any errors.
+The installation instructions provided here have been tested to work on Ubuntu 18.04, CentOS 8.1, and CentOS 7.5. The particular commands needed to install dependencies on other distributions may vary significantly. Unfortunately, this is outside the control of the NetBox maintainers. Please consult your distribution's documentation for assistance with any errors.
 
 ## Installation
 
@@ -18,7 +18,40 @@ If a recent enough version of PostgreSQL is not available through your distribut
 # apt-get install -y postgresql libpq-dev
 ```
 
-#### CentOS
+#### CentOS 8.1
+
+CentOS 8.1 ships with a supported version of PostgreSQL, so it may be installed with `dnf`. The instructions below show the installation of PostgreSQL 10.6.
+
+```no-highlight
+# dnf install -y postgresql postgresql-server postgresql-server-devel
+```
+
+CentOS users should modify the PostgreSQL configuration to accept password-based authentication by passing the `--auth-host=md5` option to `initdb`. For example:
+
+```no-highlight
+# export PGSETUP_INITDB_OPTIONS="--auth-host=md5"
+# postgresql-setup --initdb
+# unset PGSETUP_INITDB_OPTIONS
+```
+
+Verify that the host entries are configured with the `md5` option.  If the last column indicates `ident`, you will need to manually modify `/var/lib/pgsql/data/pg_hba.conf` and replace `ident` with `md5` for all host entries.
+
+```no-highlight
+# grep ^host /var/lib/pgsql/data/pg_hba.conf
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 md5
+host    replication     all             127.0.0.1/32            md5
+host    replication     all             ::1/128                 md5
+```
+
+Then, start the service and enable it to run at boot:
+
+```no-highlight
+# systemctl start postgresql
+# systemctl enable postgresql
+```
+
+#### CentOS 7.5
 
 CentOS 7.5 does not ship with a recent enough version of PostgreSQL, so it will need to be installed from an external repository. The instructions below show the installation of PostgreSQL 9.6.
 

@@ -12,7 +12,14 @@ Begin by installing all system packages required by NetBox and its dependencies.
 # apt-get install -y python3.6 python3-pip python3-venv python3-dev build-essential libxml2-dev libxslt1-dev libffi-dev libpq-dev libssl-dev zlib1g-dev
 ```
 
-### CentOS
+### CentOS 8.1
+
+```no-highlight
+# dnf install -y gcc python36 python36-devel libxml2-devel libxslt-devel libffi-devel openssl-devel redhat-rpm-config
+# easy_install-3.6 pip
+```
+
+### CentOS 7.5
 
 ```no-highlight
 # yum install -y gcc python36 python36-devel python36-setuptools libxml2-devel libxslt-devel libffi-devel openssl-devel redhat-rpm-config
@@ -51,7 +58,13 @@ If `git` is not already installed, install it:
 # apt-get install -y git
 ```
 
-#### CentOS
+#### CentOS 8.1
+
+```no-highlight
+# dnf install -y git
+```
+
+#### CentOS 7.5
 
 ```no-highlight
 # yum install -y git
@@ -74,12 +87,18 @@ Checking connectivity... done.
 
 Create a system user account named `netbox`. We'll configure the WSGI and HTTP services to run under this account. We'll also assign this user ownership of the media directory. This ensures that NetBox will be able to save local files.
 
-!!! note
-    CentOS users may need to create the `netbox` group first.
+### Ubuntu
 
-```
+```no-highlight
 # adduser --system --group netbox
 # chown --recursive netbox /opt/netbox/netbox/media/
+ ```
+
+### CentOS 8.1 and 7.5
+
+```no-highlight
+# adduser --system netbox
+# chown --recursive netbox /opt/netbox/netbox/media
 ```
 
 ## Set Up Python Environment
